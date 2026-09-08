@@ -13,7 +13,7 @@ def extrair_cursos():
 
         soup = BeautifulSoup(resposta.text, "html.parser")
 
-        # Encontra a tabela
+    
         tabela = soup.find("table", class_="table table-sm bg-light text-left")
 
         if tabela is None:
@@ -22,7 +22,7 @@ def extrair_cursos():
 
         caixa_texto.delete("1.0", tk.END)
 
-        # Cabeçalho
+    
         cabecalho = tabela.find("thead")
         colunas = cabecalho.find_all("th")
 
@@ -33,7 +33,7 @@ def extrair_cursos():
         caixa_texto.insert(tk.END, texto_cabecalho + "\n")
         caixa_texto.insert(tk.END, "-" * 100 + "\n")
 
-        # Cursos
+    
         corpo = tabela.find("tbody")
         linhas = corpo.find_all("tr")
 
@@ -57,12 +57,11 @@ def extrair_cursos():
         )
 
 
-# Criando a janela
 janela = tk.Tk()
 janela.title("Tabela de Cursos")
 janela.geometry("1000x500")
 
-# Botão
+
 botao = tk.Button(
     janela,
     text="Extrair Cursos",
@@ -71,7 +70,7 @@ botao = tk.Button(
 
 botao.pack(pady=10)
 
-# Área para mostrar a tabela
+
 caixa_texto = scrolledtext.ScrolledText(
     janela,
     width=120,
@@ -87,3 +86,15 @@ caixa_texto.pack(
 )
 
 janela.mainloop()
+
+from bs4 import BeautifulSoup
+import requests
+
+url = 'https://tabelatest.netlify.app/'
+response = requests.get(url)
+
+soup = BeautifulSoup(response.text, 'html.parser')
+
+for linha in soup.find_all('tr')[1:]:
+    colunas = linha.find_all('td')
+    print(colunas[1].get_text(strip=True))
